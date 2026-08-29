@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "author": "Joaquin Barola",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-s3-devkitc-1",
+      "id": "esp",
+      "top": -115.38,
+      "left": 119.77,
+      "attrs": {}
+    },
+    {
+      "type": "board-ili9341-cap-touch",
+      "id": "lcd1",
+      "top": -124.04,
+      "left": -153.98,
+      "attrs": {}
+    },
+    { "type": "wokwi-microsd-card", "id": "sd1", "top": 163.43, "left": 259.27, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "lcd1:VCC", "esp:5V", "red", [ "v48", "h220.8", "v-96" ] ],
+    [ "lcd1:GND", "esp:GND.1", "black", [ "v38.4", "h201.6", "v-76.8" ] ],
+    [ "lcd1:CS", "esp:15", "orange", [ "v28.8", "h182.4", "v-211.2" ] ],
+    [ "lcd1:RST", "esp:4", "gold", [ "v19.2", "h163.2", "v-240" ] ],
+    [ "lcd1:D/C", "esp:2", "green", [ "v38.4", "h0", "v19.2", "h297.6", "v-259.2" ] ],
+    [ "lcd1:MOSI", "esp:11", "blue", [ "v9.6", "h134.4", "v-96" ] ],
+    [ "lcd1:SCK", "esp:12", "violet", [ "v67.2", "h153.6", "v-144" ] ],
+    [ "lcd1:LED", "esp:6", "green", [ "v76.8", "h115.2", "v-268.8" ] ],
+    [ "lcd1:MISO", "esp:13", "green", [ "v86.4", "h144", "v-153.6" ] ],
+    [ "lcd1:SCL", "esp:8", "green", [ "v105.6", "h76.8", "v-249.6" ] ],
+    [ "lcd1:SDA", "esp:10", "green", [ "v115.2", "h115.2", "v-211.2" ] ],
+    [ "sd1:VCC", "esp:3V3", "red", [] ],
+    [ "sd1:GND", "esp:GND.1", "black", [ "h-182.4", "v-67.09", "h-28.75" ] ],
+    [ "sd1:CS", "esp:5", "orange", [ "v-19.14", "h-182.4", "v-259.2" ] ],
+    [ "sd1:DI", "esp:11", "blue", [] ],
+    [ "sd1:SCK", "esp:12", "violet", [ "v-38.41", "h-172.8", "v-86.4" ] ],
+    [ "sd1:DO", "esp:13", "green", [] ]
+  ],
+  "dependencies": {}
+}

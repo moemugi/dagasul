@@ -18,6 +18,8 @@
 #define I2C_SDA 10
 #define I2C_SCL 8
 
+#define POWER_BUTTON 7
+
 Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
 
 Adafruit_FT6206 ctp = Adafruit_FT6206();
@@ -42,6 +44,8 @@ enum Screen {
 };
 
 Screen currentScreen = HOME;
+
+bool deviceOn = false;
 
 String odoInput = "";
 String litersInput = "";
@@ -113,6 +117,8 @@ void setup() {
 
   delay(500);
 
+  pinMode(POWER_BUTTON, INPUT_PULLUP);
+
   Serial.println();
   Serial.println("FUEL & MAINTENANCE CYBERDECK");
 
@@ -178,13 +184,28 @@ void setup() {
     }
   }
 
+
   drawHomeScreen();
+  pinMode(POWER_BUTTON, INPUT_PULLUP);
+
+  deviceOn = false;
+
+  tft.fillScreen(BG_COLOR);
 
   Serial.println("System ready.");
+  Serial.println("Device OFF");
 }
 
 void loop() {
+
+  handlePowerButton();
+
+  if (!deviceOn) {
+    return;
+  }
+
   if (ctp.touched()) {
+
     TS_Point p = ctp.getPoint();
 
     int x = map(
@@ -212,6 +233,59 @@ void loop() {
 
     delay(250);
   }
+}
+
+void drawPowerOffScreen() {
+  tft.fillScreen(BG_COLOR);
+
+  tft.setTextColor(TEXT_COLOR);
+  tft.setTextSize(2);
+
+  tft.setCursor(105, 100);
+  tft.println("POWER OFF");
+
+  tft.setTextSize(1);
+
+  tft.setCursor(85, 135);
+  tft.println("PRESS BUTTON TO START");
+}
+
+void handlePowerButton() {
+  static bool lastButtonState = HIGH;
+
+  bool buttonState =
+    digitalRead(POWER_BUTTON);
+
+  if (
+    lastButtonState == HIGH &&
+    buttonState == LOW
+  ) {
+
+    if (deviceOn) {
+
+      deviceOn = false;
+
+      currentScreen = HOME;
+
+      tft.fillScreen(BG_COLOR);
+
+      Serial.println("Device OFF");
+
+    } else {
+
+      deviceOn = true;
+
+      currentScreen = HOME;
+
+      drawHomeScreen();
+
+      Serial.println("Device ON");
+    }
+
+    delay(250);
+  }
+
+  lastButtonState = buttonState;
 }
 
 void drawHomeScreen() {
